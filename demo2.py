@@ -2,7 +2,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QFileDialog, QTextEdit, QListWidget, QListWidgetItem, QHBoxLayout, QWidget, QMenuBar
 from PyQt5.QtWidgets import QComboBox, QLabel, QVBoxLayout, QPushButton, QSizePolicy
-import Translator.py
+import Translator
 import sys
 
 class MyClass(object):
@@ -44,7 +44,9 @@ class MyCentralWidget(QWidget):
         #加入一个combobox
         vbox1.addWidget(self.combobox_output_format)
         vbox1.addWidget(self.output_button)
-        self.output_button.setEnabled(False)
+        #其他条件设置良好之前，导出按钮不可用
+        #self.output_button.setEnabled(False)
+        self.output_button.clicked.connect(self.ExportFile)
         vbox1.addStretch(2)
         
     def ChooseOutputFormat(self):
@@ -57,6 +59,7 @@ class MyCentralWidget(QWidget):
         self.list_widget.clear()
         if(not file_paths):
             return
+        self.input_file_paths = file_paths
         for file_path in file_paths:  # 遍历列表中的每个文件路径
             # 清空文本编辑器应该在循环外部进行，以保留所有文件的内容
 
@@ -72,6 +75,17 @@ class MyCentralWidget(QWidget):
         self.text_edit.setPlainText("".join(file_data))
         # for line in file_data:
         #     self.text_edit.append(line)
+
+    def ExportFile(self):
+        file_paths=self.input_file_paths
+        print(file_paths)
+        output_format=self.combobox_output_format.currentText()
+        output_path=self.parent().folder_path
+        if(self.parent().InputType=="Geometry"):
+            Translator.Trans_Geometry(file_paths, output_path, output_format)
+        elif(self.parent().InputType=="Mesh"):
+            Translator.Trans_Mesh(file_paths, output_path, output_format)
+
 
 class MyMainWindow(QMainWindow):
     def __init__(self):
@@ -153,9 +167,9 @@ class MyMainWindow(QMainWindow):
             self.ChangeComboBox()
 
     def export_file(self):
-        folder_path = QFileDialog.getExistingDirectory(self, '选择文件夹', '/')
-        if folder_path:
-            self.status.showMessage('Export to: ' + folder_path)
+        self.folder_path = QFileDialog.getExistingDirectory(self, '选择文件夹', '/')
+        if self.folder_path:
+            self.status.showMessage('Export to: ' + self.folder_path)
 
     def ChangeComboBox(self):
         self.central.combobox_output_format.clear()
@@ -168,8 +182,10 @@ class MyMainWindow(QMainWindow):
             self.central.combobox_output_format.addItem("Gmsh GEO (*.geo)")
             self.central.combobox_output_format.addItem("OpenCASCADE BREP (*.brep)")
             self.central.combobox_output_format.addItem("OpenCASCADE XAO (*.xao)")
-            self.central.combobox_output_format.addItem("STEP (*.stp *.step)")
-            self.central.combobox_output_format.addItem("IGES (*.igs *.iges)")
+            self.central.combobox_output_format.addItem("STEP (*.stp)")
+            self.central.combobox_output_format.addItem("STEP (*.step)")
+            self.central.combobox_output_format.addItem("IGES (*.igs)")
+            self.central.combobox_output_format.addItem("IGES (*.iges)")
         elif(self.InputType=="Mesh"):
             # "Mesh - Gmsh MSH (*.msh);;" +
             # "Mesh - Diffpack 3D (*.diff);;" +
@@ -187,15 +203,18 @@ class MyMainWindow(QMainWindow):
             self.central.combobox_output_format.addItem("Gmsh MSH (*.msh)")
             self.central.combobox_output_format.addItem("Diffpack 3D (*.diff)")
             self.central.combobox_output_format.addItem("I-deas Universal (*.unv)")
-            self.central.combobox_output_format.addItem("MED (*.med *.mmed)")
+            self.central.combobox_output_format.addItem("MED (*.med)")
+            self.central.combobox_output_format.addItem("MED (*.mmed)")
             self.central.combobox_output_format.addItem("Inria Medit (*.mesh)")
-            self.central.combobox_output_format.addItem("Nastran Bulk Data File (*.bdf *.nas)")
+            self.central.combobox_output_format.addItem("Nastran Bulk Data File (*.bdf)")
+            self.central.combobox_output_format.addItem("Nastran Bulk Data File (*.nas)")
             self.central.combobox_output_format.addItem("Gambit Neutral (*.neu)")
             self.central.combobox_output_format.addItem("Object File Format (*.off)")
             self.central.combobox_output_format.addItem("Plot3D Structured Mesh (*.p3d)")
             self.central.combobox_output_format.addItem("STL Surface(*.stl)")
             self.central.combobox_output_format.addItem("VTK (*.vtk)")
-            self.central.combobox_output_format.addItem("VRML Surface (*.wrl *vrml)")
+            self.central.combobox_output_format.addItem("VRML Surface (*.wrl)")
+            self.central.combobox_output_format.addItem("VRML Surface (*vrml)")
             self.central.combobox_output_format.addItem("PLY2 (*.ply)")
             pass
 
