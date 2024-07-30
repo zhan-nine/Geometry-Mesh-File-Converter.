@@ -174,48 +174,37 @@ class MyMainWindow(QMainWindow):
     def ChangeComboBox(self):
         self.central.combobox_output_format.clear()
         if(self.InputType=="Geometry"):
-            # "Geometry - Gmsh GEO (*.geo);;" + 
-            # "Geometry - OpenCASCADE BREP (*.brep);;" + 
-            # "Geometry - OpenCASCADE XAO (*.xao);;" + 
-            # "Geometry - STEP (*.stp *.step);;" + 
-            # "Geometry - IGES (*.igs *.iges)"
-            self.central.combobox_output_format.addItem("Gmsh GEO (*.geo)")
+            self.central.combobox_output_format.addItem("Gmsh Options (*.opt)")
+            self.central.combobox_output_format.addItem("Gmsh Unrolled GEO (*.geo_unrolled)")
             self.central.combobox_output_format.addItem("OpenCASCADE BREP (*.brep)")
             self.central.combobox_output_format.addItem("OpenCASCADE XAO (*.xao)")
-            self.central.combobox_output_format.addItem("STEP (*.stp)")
             self.central.combobox_output_format.addItem("STEP (*.step)")
-            self.central.combobox_output_format.addItem("IGES (*.igs)")
             self.central.combobox_output_format.addItem("IGES (*.iges)")
         elif(self.InputType=="Mesh"):
-            # "Mesh - Gmsh MSH (*.msh);;" +
-            # "Mesh - Diffpack 3D (*.diff);;" +
-            # "Mesh - I-deas Universal (*.unv);;" +
-            # "Mesh - MED (*.med *.mmed);;" +
-            # "Mesh - Inria Medit (*.mesh);;" +
-            # "Mesh - Nastran Bulk Data File (*.bdf *.nas);;" +
-            # "Mesh - Gambit Neutral (*.neu);;" +
-            # "Mesh - Object File Format (*.off);;" +
-            # "Mesh - Plot3D Structured Mesh (*.p3d);;" +
-            # "Mesh - STL Surface(*.stl);;" +
-            # "Mesh - VTK (*.vtk);;" +
-            # "Mesh - VRML Surface (*.wrl *vrml);;" +
-            # "Mesh - PLY2 (*.ply)"
             self.central.combobox_output_format.addItem("Gmsh MSH (*.msh)")
+            self.central.combobox_output_format.addItem("Abaqus INP (*.inp)")
+            self.central.combobox_output_format.addItem("LSDYNA KEY (*.key)")
+            self.central.combobox_output_format.addItem("RADIOSS BLOCK (*_0000.rad)")
+            self.central.combobox_output_format.addItem("CELUM (*.celum)")
+            self.central.combobox_output_format.addItem("CGNS(Experimental) (*.cgns)")
             self.central.combobox_output_format.addItem("Diffpack 3D (*.diff)")
             self.central.combobox_output_format.addItem("I-deas Universal (*.unv)")
+            self.central.combobox_output_format.addItem("Iridum (*.ir3)")
             self.central.combobox_output_format.addItem("MED (*.med)")
-            self.central.combobox_output_format.addItem("MED (*.mmed)")
             self.central.combobox_output_format.addItem("Inria Medit (*.mesh)")
+            self.central.combobox_output_format.addItem("CEA Triangulation (*.mail)")
+            self.central.combobox_output_format.addItem("Matlab (*.m)")
             self.central.combobox_output_format.addItem("Nastran Bulk Data File (*.bdf)")
-            self.central.combobox_output_format.addItem("Nastran Bulk Data File (*.nas)")
-            self.central.combobox_output_format.addItem("Gambit Neutral (*.neu)")
             self.central.combobox_output_format.addItem("Object File Format (*.off)")
             self.central.combobox_output_format.addItem("Plot3D Structured Mesh (*.p3d)")
             self.central.combobox_output_format.addItem("STL Surface(*.stl)")
             self.central.combobox_output_format.addItem("VTK (*.vtk)")
             self.central.combobox_output_format.addItem("VRML Surface (*.wrl)")
-            self.central.combobox_output_format.addItem("VRML Surface (*vrml)")
-            self.central.combobox_output_format.addItem("PLY2 (*.ply)")
+            self.central.combobox_output_format.addItem("Tochnog (*.dat)")
+            self.central.combobox_output_format.addItem("PLY2 Surface (*.ply2)")
+            self.central.combobox_output_format.addItem("SU2 (*.su2)")
+            self.central.combobox_output_format.addItem("GAMBIT Neutral File (*.neu)")
+            self.central.combobox_output_format.addItem("X3D (*.x3d)")
             pass
 
 if __name__ == "__main__":
