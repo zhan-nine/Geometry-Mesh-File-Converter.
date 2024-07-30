@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QFileDialog, QTextEdit, QListWidget, QListWidgetItem, QHBoxLayout, QWidget, QMenuBar
-from PyQt5.QtWidgets import QComboBox, QLabel, QVBoxLayout, QPushButton, QSizePolicy
+from PyQt5.QtWidgets import QComboBox, QLabel, QVBoxLayout, QPushButton, QSizePolicy, QStatusBar, QMessageBox
 import Translator
 import sys
 
@@ -45,7 +45,7 @@ class MyCentralWidget(QWidget):
         vbox1.addWidget(self.combobox_output_format)
         vbox1.addWidget(self.output_button)
         #其他条件设置良好之前，导出按钮不可用
-        #self.output_button.setEnabled(False)
+        self.output_button.setEnabled(False)
         self.output_button.clicked.connect(self.ExportFile)
         vbox1.addStretch(2)
         
@@ -86,6 +86,13 @@ class MyCentralWidget(QWidget):
         elif(self.parent().InputType=="Mesh"):
             Translator.Trans_Mesh(file_paths, output_path, output_format)
 
+    def Show_Button(self):
+        print("Show_Button")
+        try:
+            if(self.input_file_paths and self.parent().folder_path):
+                self.output_button.setEnabled(True)
+        except:
+            self.output_button.setEnabled(False)
 
 class MyMainWindow(QMainWindow):
     def __init__(self):
@@ -98,12 +105,13 @@ class MyMainWindow(QMainWindow):
         self.setWindowTitle("格式转换器")
         self.resize(1920, 1080)
         self.InputType = ""
-        self.central = MyCentralWidget(self)
         self.setCentralWidget(self.central)
 
     def initMenu(self):
         self.menu = self.menuBar()
         self.status = self.statusBar()
+        self.central = MyCentralWidget(self)
+
         self.status.showMessage('Ready')
 
         self.file_menu = self.menu.addMenu("文件")
@@ -111,20 +119,25 @@ class MyMainWindow(QMainWindow):
 
         self.file_menu_export = self.file_menu.addAction("导出地址")
         self.file_menu_export.triggered.connect(self.export_file)
+        self.file_menu_export.triggered.connect(self.central.Show_Button)
 
         self.open_geometry = QAction("几何文件", self)
         self.open_geometry.triggered.connect(self.open_file_geometry)
+        self.open_geometry.triggered.connect(self.central.Show_Button)
         self.file_menu_open.addAction(self.open_geometry)
 
         self.open_mesh = QAction("网格文件", self)
         self.open_mesh.triggered.connect(self.open_file_mesh)
+        self.open_mesh.triggered.connect(self.central.Show_Button)
         self.file_menu_open.addAction(self.open_mesh)
 
         self.exit_action = QAction("退出", self)
         self.exit_action.triggered.connect(self.close)
         self.file_menu.addAction(self.exit_action)
         
-
+        self.introduction=QAction("关于",self)
+        self.menu.addAction(self.introduction)
+        self.introduction.triggered.connect(self.Show_Introduction)
 
     def open_file_geometry(self):
         file_path, _ = QFileDialog.getOpenFileNames(
@@ -206,6 +219,9 @@ class MyMainWindow(QMainWindow):
             self.central.combobox_output_format.addItem("GAMBIT Neutral File (*.neu)")
             self.central.combobox_output_format.addItem("X3D (*.x3d)")
             pass
+    
+    def Show_Introduction(self):
+        QMessageBox.about(self,"关于","这是一个格式转换器，可以将几何文件和网格文件转换为不同的格式。请先选择文件，再选择输出地址，再选择输出格式，然后可以导出。")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
