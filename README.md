@@ -7,3 +7,7 @@
 pip install gmsh
 pip install pyqt5
 ```
+  * Download/copy two python file here.
+  * Run it
+# Others
+Remember to star this project!!!
